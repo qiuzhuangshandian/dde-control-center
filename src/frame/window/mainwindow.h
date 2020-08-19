@@ -135,6 +135,7 @@ private:
     void updateViewBackground();
     void loadModules();
     void setListViewEditDisable(QWidget *w);
+    void updateModuleVisible();
 
 private:
     bool m_bInit{false};

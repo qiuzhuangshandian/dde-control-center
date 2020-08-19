@@ -379,12 +379,13 @@ void MainWindow::initAllModule(const QString &m)
     //通过gsetting设置某模块是否显示,默认都显示
     m_moduleSettings = new QGSettings("com.deepin.dde.control-center", QByteArray(), this);
 
-    auto listModule =  m_moduleSettings->get(GSETTINGS_HIDE_MODULE).toStringList();
-    for (auto i : m_modules) {
-        if (listModule.contains((i.first->name()))) {
-            setModuleVisible(i.first, false);
+    connect(m_moduleSettings, &QGSettings::changed, this, [ & ] (const QString &keyName) {
+        if (keyName != "hideModule" && keyName != GSETTINGS_HIDE_MODULE) {
+            return;
         }
-    }
+        updateModuleVisible();
+    });
+    updateModuleVisible();
 
     //通过gsetting获取版本类型，设置某模块是否显示
     if (QGSettings::isSchemaInstalled("com.deepin.dde.control-versiontype")) {
@@ -522,6 +523,18 @@ void MainWindow::setListViewEditDisable(QWidget *w)
         for (int i = 0; i < model->rowCount(); ++i) {
             QStandardItem *item = model->item(i);
             item->setEditable(false);
+        }
+    }
+}
+
+void MainWindow::updateModuleVisible()
+{
+    auto listModule = m_moduleSettings->get(GSETTINGS_HIDE_MODULE).toStringList();
+    for (auto i : m_modules) {
+        if (listModule.contains((i.first->name()))) {
+            setModuleVisible(i.first, false);
+        } else {
+            setModuleVisible(i.first, true);
         }
     }
 }
