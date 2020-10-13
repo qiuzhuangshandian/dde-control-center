@@ -166,6 +166,7 @@ private:
     QGSettings *m_moduleSettings{nullptr};
     QGSettings *m_versionType{nullptr};
     DisplayInter m_displayInter;
+    QStringList m_hideModuleNames;
 };
 }
 
