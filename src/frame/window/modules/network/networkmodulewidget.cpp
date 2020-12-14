@@ -285,9 +285,6 @@ void NetworkModuleWidget::onDeviceListChanged(const QList<NetworkDevice *> &devi
             continue;
 
         qDebug() << "add Wireless item!";
-        if (qobject_cast<WirelessDevice *>(dev)->supportHotspot()) {
-            have_ap = true;
-        }
 
         devits.push_back(createDeviceGroup(dev, ++count, wirelessDevice > 1));
     }
